@@ -1,0 +1,11 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /step-project-se
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: step-project-se
+  profiles:
+    include: actuator
