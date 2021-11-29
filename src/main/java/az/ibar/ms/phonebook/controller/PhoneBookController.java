@@ -10,12 +10,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
 @Validated
-@RequestMapping("step-project-se")
+@RequestMapping("user")
 public class PhoneBookController {
 
     private final PhoneBookService phoneBookService;
