@@ -1,13 +1,25 @@
-
-plugins {
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
+plugins  {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version "${dependencyManagement}"
     id 'java'
+    id 'jacoco'
 }
+
+
 
 group = "${groupName}"
 version = "${projectVersion}"
 sourceCompatibility = "${sourceCompatibility}"
+
+
+
+
 
 configurations {
 
@@ -22,19 +34,61 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation 'org.apache.commons:commons-lang3'
+    implementation "io.springfox:springfox-swagger-ui:${swaggerUIVersion}"
+    implementation "io.springfox:springfox-swagger2:${swagger2Version}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructProcessorVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructProcessorVersion}"
+    implementation "mysql:mysql-connector-java:8.0.27"
+    implementation "org.springframework.boot:spring-boot-starter-validation:$validationVersion"
+    implementation "org.powermock:powermock-module-junit4:${mockitoVersion}"
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    // Unit test
+    testImplementation "org.powermock:powermock-api-mockito2:${mockitoVersion}"
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterApiVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitJupiterApiVersion}")
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 
 test {
     useJUnitPlatform()
 }
+
+jacoco {
+    toolVersion = "${jacocoVersion}"
+    reportsDir = file("build/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+    }
+}
+
+
+compileJava {
+    options.compilerArgs += "-Amapstruct.defaultComponentModel=spring"
+    options.compilerArgs += "-Amapstruct.unmappedTargetPolicy=ERROR"
+}
+
 
 bootJar {
     archiveName 'app.jar'

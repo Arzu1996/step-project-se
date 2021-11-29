@@ -10,8 +10,8 @@ import java.util.UUID;
 public interface PhoneBookService {
 
     PhoneBookResponseDto save(PhoneBookDto phoneBookDto);
-    PhoneBookResponseDto edit(UUID userId, PhoneBookDto phoneBookDto);
-    PhoneBookResponseDto delete(UUID userId);
+    PhoneBookResponseDto edit(String userId, PhoneBookDto phoneBookDto);
+    PhoneBookResponseDto delete(String userId);
     List<PhoneBookEntity> getAllUsers();
 
 }

@@ -4,7 +4,6 @@ import az.ibar.ms.phonebook.dto.PhoneBookDto;
 import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.service.PhoneBookService;
-import az.ibar.ms.phonebook.service.impl.PhoneBookServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,9 +15,11 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @Validated
+@RequestMapping("step-project-se")
 public class PhoneBookController {
 
     private final PhoneBookService phoneBookService;
+
 
     @PostMapping("add")
     public ResponseEntity<PhoneBookResponseDto> addUser(@RequestBody PhoneBookDto request) {
@@ -26,12 +27,12 @@ public class PhoneBookController {
     }
 
     @PutMapping("edit/{userId}")
-    public ResponseEntity<PhoneBookResponseDto> editUser(@PathVariable UUID userId, @RequestBody PhoneBookDto request) {
+    public ResponseEntity<PhoneBookResponseDto> editUser(@PathVariable String userId, @RequestBody PhoneBookDto request) {
         return ResponseEntity.ok(phoneBookService.edit(userId, request));
     }
 
     @DeleteMapping("delete/{userId}")
-    public ResponseEntity<PhoneBookResponseDto> deleteUser(@PathVariable UUID userId) {
+    public ResponseEntity<PhoneBookResponseDto> deleteUser(@PathVariable String userId) {
         return ResponseEntity.ok(phoneBookService.delete(userId));
     }
 

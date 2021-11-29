@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhoneBookResponseDto {
-    private UUID user_id;
+    private String user_id;
     private String operation_type;
     private String operation_status;
 

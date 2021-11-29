@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +16,10 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Data
-@Table(name = "PHONEBOOK_DETAILS")
+@Table(name = "PHONEBOOK_DETAILS", schema = "mysql")
 @Builder
 public class PhoneBookEntity {
 
@@ -25,7 +27,7 @@ public class PhoneBookEntity {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "ID")
-    private UUID id;
+    private String id;
 
     @Column(name = "USER_NAME")
     private String userName;

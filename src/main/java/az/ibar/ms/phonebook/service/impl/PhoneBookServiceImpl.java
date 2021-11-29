@@ -26,13 +26,13 @@ public class PhoneBookServiceImpl implements PhoneBookService {
                 .build();
         try {
             phoneBookRepository.save(phoneBookEntity);
-            return PhoneBookResponseDto.builder().operation_status("add")
+            return PhoneBookResponseDto.builder().operation_type("add")
                     .user_id(phoneBookDto.getUserId())
                     .operation_status("success")
                     .build();
         }
         catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_status("add")
+            return PhoneBookResponseDto.builder().operation_type("add")
                     .user_id(phoneBookDto.getUserId())
                     .operation_status("fail")
                     .build();
@@ -40,19 +40,19 @@ public class PhoneBookServiceImpl implements PhoneBookService {
     }
 
     @Override
-    public PhoneBookResponseDto edit(UUID userId, PhoneBookDto phoneBookDto) {
+    public PhoneBookResponseDto edit(String userId, PhoneBookDto phoneBookDto) {
         PhoneBookEntity phoneBookEntity = phoneBookRepository.findById(userId).orElseThrow();
         phoneBookEntity.setPhoneNumber(phoneBookDto.getPhone());
         phoneBookEntity.setUserName(phoneBookDto.getName());
         try {
             phoneBookRepository.save(phoneBookEntity);
-            return PhoneBookResponseDto.builder().operation_status("edit")
+            return PhoneBookResponseDto.builder().operation_type("edit")
                     .user_id(userId)
                     .operation_status("success")
                     .build();
         }
         catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_status("edit")
+            return PhoneBookResponseDto.builder().operation_type("edit")
                     .user_id(userId)
                     .operation_status("fail")
                     .build();
@@ -61,16 +61,16 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
 
     @Override
-    public PhoneBookResponseDto delete(UUID userId) {
+    public PhoneBookResponseDto delete(String userId) {
         try {
             phoneBookRepository.deleteById(userId);
-            return PhoneBookResponseDto.builder().operation_status("delete")
+            return PhoneBookResponseDto.builder().operation_type("delete")
                     .user_id(userId)
                     .operation_status("success")
                     .build();
         }
         catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_status("delete")
+            return PhoneBookResponseDto.builder().operation_type("delete")
                     .user_id(userId)
                     .operation_status("fail")
                     .build();

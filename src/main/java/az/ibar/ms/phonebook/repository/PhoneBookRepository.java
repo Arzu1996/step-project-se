@@ -8,7 +8,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface PhoneBookRepository extends JpaRepository<PhoneBookEntity, UUID> {
+public interface PhoneBookRepository extends JpaRepository<PhoneBookEntity, String> {
 
 }
 

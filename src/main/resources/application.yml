@@ -7,5 +7,9 @@ spring:
     banner-mode: off
   application:
     name: step-project-se
+  datasource:
+    url: jdbc:mysql://localhost:3306/mysql?useSSL=false
+    username: root
+    password: root
   profiles:
     include: actuator
