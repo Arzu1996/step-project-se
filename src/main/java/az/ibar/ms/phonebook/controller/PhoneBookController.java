@@ -1,10 +1,13 @@
 package az.ibar.ms.phonebook.controller;
 
+import az.ibar.ms.phonebook.dto.ApiResponse;
 import az.ibar.ms.phonebook.dto.PhoneBookDto;
 import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.service.PhoneBookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @Validated
 @RequestMapping("user")
+@CrossOrigin("*")
 public class PhoneBookController {
 
     private final PhoneBookService phoneBookService;
 
 
-    @PostMapping("add")
+    @PostMapping(value = "add")
     public ResponseEntity<PhoneBookResponseDto> addUser(@RequestBody PhoneBookDto request) {
         return ResponseEntity.ok(phoneBookService.save(request));
     }
@@ -35,10 +39,14 @@ public class PhoneBookController {
         return ResponseEntity.ok(phoneBookService.delete(userId));
     }
 
-    @GetMapping("list")
+    @GetMapping(value = "list",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PhoneBookEntity>> getAllUsers() {
         return ResponseEntity.ok(phoneBookService.getAllUsers());
     }
 
+    @GetMapping("status")
+    public ResponseEntity<ApiResponse> getStatus() {
+        return ResponseEntity.ok(phoneBookService.dbHealthCheck());
+    }
 
 }

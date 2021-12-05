@@ -1,11 +1,14 @@
 package az.ibar.ms.phonebook.service.impl;
 
+import az.ibar.ms.phonebook.dto.ApiResponse;
 import az.ibar.ms.phonebook.dto.PhoneBookDto;
 import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.repository.PhoneBookRepository;
 import az.ibar.ms.phonebook.service.PhoneBookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,4 +86,22 @@ public class PhoneBookServiceImpl implements PhoneBookService {
     }
 
 
+    @Override
+    public ApiResponse dbHealthCheck() {
+        try {
+            int errorCode = check();
+            if (errorCode != 1)
+                return new ApiResponse("not ok");
+            return new ApiResponse("ok");
+        } catch (Exception ex) {
+            return new ApiResponse("not ok");
+        }
+    }
+
+    public int check() {
+        List<Object> results = phoneBookRepository.checkConnection();
+        return results.size();
+    }
 }
+
+
