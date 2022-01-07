@@ -16,13 +16,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = Set.of(MediaType.APPLICATION_JSON_VALUE);
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .produces(DEFAULT_PRODUCES_AND_CONSUMES)
-                .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("az.ibar.ms.phonebook.controller"))
                 .paths(PathSelectors.any())

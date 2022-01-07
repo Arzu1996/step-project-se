@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface PhoneBookRepository extends JpaRepository<PhoneBookEntity, String> {
     @Query(value = "select 1 from dual",nativeQuery = true)
     List<Object> checkConnection();
+
+    PhoneBookEntity getPhoneBookEntityById(String userId);
 }
 
 

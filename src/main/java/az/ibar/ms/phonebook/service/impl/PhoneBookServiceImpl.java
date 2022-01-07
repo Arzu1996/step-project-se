@@ -43,7 +43,7 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
     @Override
     public PhoneBookResponseDto edit(String userId, PhoneBookDto phoneBookDto) {
-        PhoneBookEntity phoneBookEntity = phoneBookRepository.findById(userId).orElseThrow();
+        PhoneBookEntity phoneBookEntity = phoneBookRepository.getPhoneBookEntityById(userId);
         phoneBookEntity.setPhoneNumber(phoneBookDto.getPhone());
         phoneBookEntity.setUserName(phoneBookDto.getName());
         try {

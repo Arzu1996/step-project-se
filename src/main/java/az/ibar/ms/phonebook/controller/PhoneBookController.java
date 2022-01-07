@@ -39,7 +39,7 @@ public class PhoneBookController {
         return ResponseEntity.ok(phoneBookService.delete(userId));
     }
 
-    @GetMapping(value = "list",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "list")
     public ResponseEntity<List<PhoneBookEntity>> getAllUsers() {
         return ResponseEntity.ok(phoneBookService.getAllUsers());
     }
