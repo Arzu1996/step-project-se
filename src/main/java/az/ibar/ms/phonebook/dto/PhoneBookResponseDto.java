@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhoneBookResponseDto {
-    private String user_id;
-    private String operation_type;
-    private String operation_status;
+    private String userId;
+    private String operationType;
+    private String operationStatus;
 
 }
