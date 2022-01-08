@@ -149,9 +149,17 @@ class PhoneBookServiceImplTest {
 
     @Test
     public void dbHealthCheckFailCase(){
-        when(phoneBookRepository.checkConnection()).thenReturn(resultsFail);
+        when(phoneBookRepository.checkConnection()).thenThrow(NullPointerException.class);
         ApiResponse apiResponse = phoneBookService.dbHealthCheck();
         Assertions.assertThat(apiResponse.getStatus()).isEqualTo("not ok");
+
+    }
+
+    @Test
+    public void check(){
+        when(phoneBookRepository.checkConnection()).thenReturn(results);
+        int size = phoneBookService.check();
+        Assertions.assertThat(size).isEqualTo(1);
 
     }
 

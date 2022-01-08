@@ -83,12 +83,18 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
     @Override
     public ApiResponse dbHealthCheck() {
-        List<Object> results = phoneBookRepository.checkConnection();
-
-        int errorCode = results.size();
-        if (errorCode != 1)
+        try {
+            int errorCode = check();
+            if (errorCode != 1)
+                return new ApiResponse("not ok");
+            return new ApiResponse("ok");
+        } catch (Exception ex) {
             return new ApiResponse("not ok");
-        return new ApiResponse("ok");
+        }
+    }
 
+    public int check() {
+        List<Object> results = phoneBookRepository.checkConnection();
+        return results.size();
     }
 }
