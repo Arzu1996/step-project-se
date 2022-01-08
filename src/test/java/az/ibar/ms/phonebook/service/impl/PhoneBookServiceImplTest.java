@@ -22,8 +22,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -79,7 +78,7 @@ class PhoneBookServiceImplTest {
 
     @Test
     void saveUserFailCaseTest() {
-        when(phoneBookRepository.save(phoneBookEntity)).thenThrow(DuplicateKeyException.class);
+        when(phoneBookRepository.save(phoneBookEntity)).thenThrow(NullPointerException.class);
 
         PhoneBookResponseDto operation = phoneBookService.save(phoneBookDto);
 
@@ -99,56 +98,28 @@ class PhoneBookServiceImplTest {
         Assertions.assertThat(operation.getOperationStatus()).isEqualTo(SUCCESS);
         Assertions.assertThat(operation.getUserId()).isEqualTo(phoneBookEntity.getId());
     }
-//
-//    @Test
-//    public void editUserWhenNoUserFound() {
-//
-//        when(phoneBookRepository.findById(any())).thenReturn(Optional.empty());
-//
-//        Operation operation = phoneBookService.editUser(phoneBookEntity);
-//
-//        verify(phoneBookRepository, never()).save(any());
-//        MatcherAssert.assertThat(operation.getOperationType(), is(equalTo(OperationType.EDIT)));
-//        MatcherAssert.assertThat(operation.getOperationStatus(), is(equalTo(OperationStatus.FAIL)));
-//    }
-//
-//    @Test
-//    public void deleteUser() {
-//
-//        when(phoneBookRepository.findById(any())).thenReturn(Optional.of(phoneBookEntity));
-//
-//        Operation operation = phoneBookService.deleteUser(phoneBookEntity.getUserId());
-//        verify(phoneBookRepository).delete(any());
-//
-//        MatcherAssert.assertThat(operation.getOperationType(), is(equalTo(OperationType.DELETE)));
-//        MatcherAssert.assertThat(operation.getOperationStatus(), is(equalTo(OperationStatus.SUCCESS)));
-//
-//    }
-//
-//    @Test
-//    public void deleteUserWhenUserNotFound() {
-//
-//        when(phoneBookRepository.findById(any())).thenReturn(Optional.empty());
-//
-//        Operation operation = phoneBookService.deleteUser(phoneBookEntity.getUserId());
-//        verify(phoneBookRepository, never()).delete(any());
-//
-//        MatcherAssert.assertThat(operation.getOperationType(), is(equalTo(OperationType.DELETE)));
-//        MatcherAssert.assertThat(operation.getOperationStatus(), is(equalTo(OperationStatus.FAIL)));
-//
-//    }
-//
-//    @Test
-//    public void deleteUserWhenFailCase() {
-//
-//        when(phoneBookRepository.findById(any())).thenThrow(DuplicateKeyException.class);
-//
-//        Operation operation = phoneBookService.deleteUser(phoneBookEntity.getUserId());
-//        verify(phoneBookRepository, never()).delete(any());
-//
-//        MatcherAssert.assertThat(operation.getOperationType(), is(equalTo(OperationType.DELETE)));
-//        MatcherAssert.assertThat(operation.getOperationStatus(), is(equalTo(OperationStatus.FAIL)));
-//
-//    }
+
+    @Test
+    public void editFailCase() {
+
+        when(phoneBookRepository.getPhoneBookEntityById(anyString())).thenReturn(phoneBookEntity);
+        when(phoneBookRepository.save(phoneBookEntity)).thenThrow(NullPointerException.class);
+
+        PhoneBookResponseDto operation = phoneBookService.edit(userId, phoneBookDto);
+
+        verify(phoneBookRepository).save(any());
+        Assertions.assertThat(operation.getOperationType()).isEqualTo("edit");
+        Assertions.assertThat(operation.getOperationStatus()).isEqualTo(FAIL);
+    }
+
+    @Test
+    public void deleteUser() {
+
+        PhoneBookResponseDto operation = phoneBookService.delete(userId);
+        verify(phoneBookRepository).deleteById(any());
+        Assertions.assertThat(operation.getOperationType()).isEqualTo("delete");
+        Assertions.assertThat(operation.getOperationStatus()).isEqualTo(SUCCESS);
+
+    }
 
 }

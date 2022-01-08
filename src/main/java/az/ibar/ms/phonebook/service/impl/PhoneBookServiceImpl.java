@@ -63,18 +63,13 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
     @Override
     public PhoneBookResponseDto delete(String userId) {
-        try {
-            phoneBookRepository.deleteById(userId);
-            return PhoneBookResponseDto.builder().operationType("delete")
+        phoneBookRepository.deleteById(userId);
+
+        return PhoneBookResponseDto.builder().operationType("delete")
                     .userId(userId)
                     .operationStatus(SUCCESS)
                     .build();
-        } catch (Exception e) {
-            return PhoneBookResponseDto.builder().operationType("delete")
-                    .userId(userId)
-                    .operationStatus(FAIL)
-                    .build();
-        }
+
     }
 
 

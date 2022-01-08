@@ -14,6 +14,7 @@ public interface PhoneBookRepository extends JpaRepository<PhoneBookEntity, Stri
     List<Object> checkConnection();
 
     PhoneBookEntity getPhoneBookEntityById(String userId);
+
 }
 
 

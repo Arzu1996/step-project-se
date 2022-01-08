@@ -14,12 +14,9 @@ plugins  {
 
 sonarqube {
     properties {
-        property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.projectKey", "GradleProject"
         property "sonar.host.url", "http://localhost:9000"
         property "sonar.login", "b682ba3a25d4fd7a95f6634451645923a467b6c0"
-        property "sonar.jacoco.reportPath", "build/jacoco/test.exec"
-        property "sonar.junit.reportsPath", "build/test-results/test"
         property 'sonar.coverage.exclusions',
                 "**/az/ibar/ms/phonebook/*," +
                         "**/az/ibar/ms/phonebook/config/*," +
@@ -79,17 +76,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("build/reports/jacoco")
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
         xml.enabled true
-        csv.enabled false
     }
 }
 
