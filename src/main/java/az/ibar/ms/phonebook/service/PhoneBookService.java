@@ -4,7 +4,6 @@ import az.ibar.ms.phonebook.dto.ApiResponse;
 import az.ibar.ms.phonebook.dto.PhoneBookDto;
 import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
-import org.hibernate.tool.schema.ast.SqlScriptParserException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
