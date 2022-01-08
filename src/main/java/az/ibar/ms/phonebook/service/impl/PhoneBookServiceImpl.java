@@ -60,7 +60,6 @@ public class PhoneBookServiceImpl implements PhoneBookService {
         }
     }
 
-
     @Override
     public PhoneBookResponseDto delete(String userId) {
         try {
@@ -77,26 +76,19 @@ public class PhoneBookServiceImpl implements PhoneBookService {
         }
     }
 
-
     @Override
     public List<PhoneBookEntity> getAllUsers() {
         return phoneBookRepository.findAll();
     }
 
-
     @Override
     public ApiResponse dbHealthCheck() {
-        int errorCode = check();
+        List<Object> results = phoneBookRepository.checkConnection();
+
+        int errorCode = results.size();
         if (errorCode != 1)
             return new ApiResponse("not ok");
         return new ApiResponse("ok");
 
     }
-
-    public int check() {
-        List<Object> results = phoneBookRepository.checkConnection();
-        return results.size();
-    }
 }
-
-
