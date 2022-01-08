@@ -1,10 +1,10 @@
 package az.ibar.ms.phonebook.service.impl;
 
+import az.ibar.ms.phonebook.dto.ApiResponse;
 import az.ibar.ms.phonebook.dto.PhoneBookDto;
 import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.repository.PhoneBookRepository;
-import az.ibar.ms.phonebook.service.PhoneBookService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.dao.DuplicateKeyException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -41,9 +41,13 @@ class PhoneBookServiceImplTest {
 
     private PhoneBookDto phoneBookDto;
 
+    private ApiResponse apiResponse;
+
     private final String userId = UUID.randomUUID().toString();
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
+    List<Object> results = new ArrayList<>();
+    List<Object> resultsFail = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -55,6 +59,8 @@ class PhoneBookServiceImplTest {
         phoneBookDto = new PhoneBookDto();
         phoneBookDto.setUserId(userId);
         phoneBookDto.setName("name");
+
+        results.add(new Object());
     }
 
     @Test
@@ -119,6 +125,22 @@ class PhoneBookServiceImplTest {
         verify(phoneBookRepository).deleteById(any());
         Assertions.assertThat(operation.getOperationType()).isEqualTo("delete");
         Assertions.assertThat(operation.getOperationStatus()).isEqualTo(SUCCESS);
+
+    }
+
+    @Test
+    public void dbHealthCheck(){
+        when(phoneBookRepository.checkConnection()).thenReturn(results);
+        ApiResponse apiResponse = phoneBookService.dbHealthCheck();
+        Assertions.assertThat(apiResponse.getStatus()).isEqualTo("ok");
+
+    }
+
+    @Test
+    public void dbHealthCheckFailCase(){
+        when(phoneBookRepository.checkConnection()).thenReturn(resultsFail);
+        ApiResponse apiResponse = phoneBookService.dbHealthCheck();
+        Assertions.assertThat(apiResponse.getStatus()).isEqualTo("not ok");
 
     }
 

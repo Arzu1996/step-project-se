@@ -7,6 +7,7 @@ import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.repository.PhoneBookRepository;
 import az.ibar.ms.phonebook.service.PhoneBookService;
 import lombok.AllArgsConstructor;
+import org.hibernate.tool.schema.ast.SqlScriptParserException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,20 +81,16 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
 
     @Override
-    public ApiResponse dbHealthCheck() {
+    public ApiResponse dbHealthCheck(){
+        List<Object> results = phoneBookRepository.checkConnection();
         try {
-            int errorCode = check();
+            int errorCode = results.size();
             if (errorCode != 1)
                 return new ApiResponse("not ok");
             return new ApiResponse("ok");
         } catch (Exception ex) {
             return new ApiResponse("not ok");
         }
-    }
-
-    public int check() {
-        List<Object> results = phoneBookRepository.checkConnection();
-        return results.size();
     }
 }
 
