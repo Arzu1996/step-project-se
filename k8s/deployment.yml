@@ -39,3 +39,4 @@ spec:
         - name: backend-config
           configMap:
             name: backend-config
+            kubectl set image deployment/app-back-deployment app-back=Arzu1996/backend
