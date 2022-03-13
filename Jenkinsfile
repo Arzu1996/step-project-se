@@ -41,5 +41,13 @@ pipeline {
                  }
             }
         }
+        stage('6 deploy on K8s') {
+            steps {
+                 script {
+                     sh 'kubectl rollout restart deployment/app-back-deployment -n phonebook-app'
+                     }
+                 }
+            }
+        }
     }
 }
