@@ -8,8 +8,18 @@ spring:
   application:
     name: step-project-se
   datasource:
-    url: jdbc:mysql://localhost:3306/mysql?useSSL=false
-    username: root
-    password: root
+    url: ${MYSQL_DB_URL:jdbc:mysql://localhost:3306/mysql?useSSL=false}
+    username: ${MYSQL_DB_USERNAME:root}
+    password: ${MYSQL_DB_PASSWORD:root}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  liquibase:
+    enabled: ${SPRING_LIQUIBASE_ENABLED:true}
+    change-log: classpath:/liquibase/changelog-master.xml
+    drop-first: false
+    database-change-log-table: MS_PHONEBOOK_DBCHANGELOG
+    database-change-log-lock-table: MS_PHONEBOOK_DBCHANGELOGLOCK
   profiles:
     include: actuator

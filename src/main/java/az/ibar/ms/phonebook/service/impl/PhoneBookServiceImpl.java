@@ -7,8 +7,6 @@ import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.repository.PhoneBookRepository;
 import az.ibar.ms.phonebook.service.PhoneBookService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 public class PhoneBookServiceImpl implements PhoneBookService {
 
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
     private final PhoneBookRepository phoneBookRepository;
 
+
     @Override
-    public PhoneBookResponseDto save(PhoneBookDto phoneBookDto){
+    public PhoneBookResponseDto save(PhoneBookDto phoneBookDto) {
         PhoneBookEntity phoneBookEntity = PhoneBookEntity.builder()
                 .phoneNumber(phoneBookDto.getPhone())
                 .id(phoneBookDto.getUserId())
@@ -28,63 +29,57 @@ public class PhoneBookServiceImpl implements PhoneBookService {
                 .build();
         try {
             phoneBookRepository.save(phoneBookEntity);
-            return PhoneBookResponseDto.builder().operation_type("add")
-                    .user_id(phoneBookDto.getUserId())
-                    .operation_status("success")
+            return PhoneBookResponseDto.builder().operationType("add")
+                    .userId(phoneBookDto.getUserId())
+                    .operationStatus(SUCCESS)
                     .build();
-        }
-        catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_type("add")
-                    .user_id(phoneBookDto.getUserId())
-                    .operation_status("fail")
+        } catch (Exception e) {
+            return PhoneBookResponseDto.builder().operationType("add")
+                    .userId(phoneBookDto.getUserId())
+                    .operationStatus(FAIL)
                     .build();
         }
     }
 
     @Override
     public PhoneBookResponseDto edit(String userId, PhoneBookDto phoneBookDto) {
-        PhoneBookEntity phoneBookEntity = phoneBookRepository.findById(userId).orElseThrow();
+        PhoneBookEntity phoneBookEntity = phoneBookRepository.getPhoneBookEntityById(userId);
         phoneBookEntity.setPhoneNumber(phoneBookDto.getPhone());
         phoneBookEntity.setUserName(phoneBookDto.getName());
         try {
             phoneBookRepository.save(phoneBookEntity);
-            return PhoneBookResponseDto.builder().operation_type("edit")
-                    .user_id(userId)
-                    .operation_status("success")
+            return PhoneBookResponseDto.builder().operationType("edit")
+                    .userId(userId)
+                    .operationStatus(SUCCESS)
                     .build();
-        }
-        catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_type("edit")
-                    .user_id(userId)
-                    .operation_status("fail")
+        } catch (Exception e) {
+            return PhoneBookResponseDto.builder().operationType("edit")
+                    .userId(userId)
+                    .operationStatus(FAIL)
                     .build();
         }
     }
-
 
     @Override
     public PhoneBookResponseDto delete(String userId) {
         try {
             phoneBookRepository.deleteById(userId);
-            return PhoneBookResponseDto.builder().operation_type("delete")
-                    .user_id(userId)
-                    .operation_status("success")
+            return PhoneBookResponseDto.builder().operationType("delete")
+                    .userId(userId)
+                    .operationStatus(SUCCESS)
                     .build();
-        }
-        catch (Exception e){
-            return PhoneBookResponseDto.builder().operation_type("delete")
-                    .user_id(userId)
-                    .operation_status("fail")
+        } catch (Exception e) {
+            return PhoneBookResponseDto.builder().operationType("delete")
+                    .userId(userId)
+                    .operationStatus(FAIL)
                     .build();
         }
     }
-
 
     @Override
     public List<PhoneBookEntity> getAllUsers() {
         return phoneBookRepository.findAll();
     }
-
 
     @Override
     public ApiResponse dbHealthCheck() {
@@ -103,5 +98,3 @@ public class PhoneBookServiceImpl implements PhoneBookService {
         return results.size();
     }
 }
-
-

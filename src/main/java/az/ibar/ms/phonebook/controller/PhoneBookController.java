@@ -6,8 +6,6 @@ import az.ibar.ms.phonebook.dto.PhoneBookResponseDto;
 import az.ibar.ms.phonebook.entity.PhoneBookEntity;
 import az.ibar.ms.phonebook.service.PhoneBookService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Validated
 @RequestMapping("user")
-@CrossOrigin("*")
 public class PhoneBookController {
 
     private final PhoneBookService phoneBookService;
@@ -39,7 +36,7 @@ public class PhoneBookController {
         return ResponseEntity.ok(phoneBookService.delete(userId));
     }
 
-    @GetMapping(value = "list",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "list")
     public ResponseEntity<List<PhoneBookEntity>> getAllUsers() {
         return ResponseEntity.ok(phoneBookService.getAllUsers());
     }

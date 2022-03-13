@@ -9,8 +9,22 @@ plugins  {
     id 'io.spring.dependency-management' version "${dependencyManagement}"
     id 'java'
     id 'jacoco'
+    id "org.sonarqube" version "3.3"
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", "GradleProject"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.login", "b682ba3a25d4fd7a95f6634451645923a467b6c0"
+        property 'sonar.coverage.exclusions',
+                "**/az/ibar/ms/phonebook/*," +
+                        "**/az/ibar/ms/phonebook/config/*," +
+                        "**/az/ibar/ms/phonebook/dto/*, " +
+                        "**/az/ibar/ms/phonebook/entity/*, " +
+                        "**/az/ibar/ms/phonebook/controller/* "
+    }
+}
 
 
 group = "${groupName}"
@@ -50,16 +64,9 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation:$validationVersion"
     implementation "org.powermock:powermock-module-junit4:${mockitoVersion}"
 
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    // Unit test
-    testImplementation "org.powermock:powermock-api-mockito2:${mockitoVersion}"
-
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-
+    testImplementation group: 'junit', name: 'junit', version: '4.4'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterApiVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitJupiterApiVersion}")
     implementation 'org.springframework.kafka:spring-kafka'
@@ -69,17 +76,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 jacoco {
     toolVersion = "${jacocoVersion}"
-    reportsDir = file("build/reports/jacoco")
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
         xml.enabled true
-        csv.enabled false
     }
 }
 
